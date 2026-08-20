@@ -172,8 +172,12 @@
 @theme inline {
   --color-cream-deep: var(--cream-deep);
   --color-gold: var(--gold);
+  --color-cherry: var(--cherry);
+  --color-cherry-light: var(--cherry-light);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --shadow-cherry: var(--shadow-cherry);
+  --shadow-cherry-sm: var(--shadow-cherry-sm);
 }
 
 @utility eyebrow {
