@@ -14,6 +14,15 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-cherry/20 bg-background/95 backdrop-blur-md">
+      <div className="bg-cherry text-background">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-5 py-2 text-center lg:px-10">
+          <span className="h-1 w-1 rounded-full bg-background/60" />
+          <p className="eyebrow text-[9px] opacity-90 md:text-[10px]">
+            Fornadas diárias · Retirada na loja e entrega em São Paulo
+          </p>
+          <span className="h-1 w-1 rounded-full bg-background/60" />
+        </div>
+      </div>
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-5 md:h-[72px] lg:px-10">
         <Link to="/" className="group flex flex-col leading-none" onClick={() => setOpen(false)}>
           <span className="font-display text-xl tracking-[0.18em] text-cherry transition-colors group-hover:text-cherry-light md:text-2xl">
