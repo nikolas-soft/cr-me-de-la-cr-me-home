@@ -98,6 +98,11 @@ function Index() {
           <h2 className="mt-3 font-display text-3xl text-foreground md:text-4xl">
             Uma casa de doces, três caminhos
           </h2>
+          <div className="mx-auto mt-6 flex w-full max-w-md items-center gap-4">
+            <div className="h-px flex-1 bg-cherry/15" />
+            <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
+            <div className="h-px flex-1 bg-cherry/15" />
+          </div>
         </Reveal>
 
         <div className="mt-14 grid gap-7 md:grid-cols-3">
@@ -105,9 +110,9 @@ function Index() {
             <Reveal key={card.title} delay={i * 120}>
               <Link
                 to={card.to}
-                className="group block overflow-hidden rounded-3xl border border-border bg-cream-deep shadow-[var(--shadow-soft)] transition-transform duration-500 hover:-translate-y-1.5"
+                className="group card-cherry-accent block overflow-hidden rounded-3xl border border-border bg-cream-deep shadow-cherry-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-cherry"
               >
-                <div className="overflow-hidden">
+                <div className="relative overflow-hidden">
                   <img
                     src={card.image}
                     alt={card.title}
@@ -116,12 +121,15 @@ function Index() {
                     height={1100}
                     className="h-64 w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105 md:h-72"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-cherry/25 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
-                <div className="px-7 py-7">
+                <div className="relative px-7 py-7">
+                  <div className="absolute left-7 top-0 h-1 w-12 -translate-y-1/2 rounded-full bg-cherry/80 transition-all duration-500 group-hover:w-20 group-hover:bg-cherry" />
                   <h3 className="font-display text-2xl text-foreground">{card.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{card.text}</p>
-                  <span className="mt-5 inline-block text-xs tracking-[0.2em] uppercase text-foreground">
-                    Descobrir →
+                  <span className="mt-5 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-cherry transition-colors group-hover:text-cherry-light">
+                    Descobrir
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                   </span>
                 </div>
               </Link>
