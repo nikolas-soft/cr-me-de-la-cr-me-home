@@ -191,6 +191,11 @@ function Index() {
       {/* Faixa final */}
       <section className="mx-auto max-w-3xl px-5 py-20 text-center lg:py-28">
         <Reveal>
+          <div className="mx-auto mb-8 flex w-full max-w-md items-center gap-4">
+            <div className="h-px flex-1 bg-cherry/15" />
+            <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
+            <div className="h-px flex-1 bg-cherry/15" />
+          </div>
           <p className="eyebrow text-muted-foreground">Feito à mão</p>
           <p className="mt-5 font-display text-2xl leading-relaxed text-foreground italic md:text-3xl">
             “Nada aqui é apressado. A massa descansa, o creme esfria e o forno faz o resto.”
