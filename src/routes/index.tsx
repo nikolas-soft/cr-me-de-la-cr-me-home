@@ -72,15 +72,17 @@ function Index() {
           height={1088}
           className="h-[68vh] min-h-[420px] w-full object-cover md:h-[80vh]"
         />
-        <div className="absolute inset-0 bg-foreground/45" />
+        <div className="gradient-cherry-creme absolute inset-0" />
         <div className="absolute inset-0 flex items-center">
           <div className="mx-auto w-full max-w-7xl px-5 lg:px-10">
             <div className="max-w-xl text-background">
-              <p className="eyebrow opacity-85">Confeitaria artesanal · desde 1998</p>
-              <h1 className="mt-5 font-display text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
+              <span className="inline-block rounded-sm bg-background/90 px-3 py-1.5 text-[10px] font-semibold tracking-[0.2em] text-cherry shadow-cherry-sm">
+                TRADIÇÃO FRANCESA · DESDE 1998
+              </span>
+              <h1 className="mt-6 font-display text-4xl leading-[1.05] drop-shadow-sm sm:text-5xl lg:text-6xl">
                 Doces clássicos, feitos à mão todos os dias
               </h1>
-              <p className="mt-5 max-w-md text-sm leading-relaxed opacity-90 md:text-base">
+              <p className="mt-5 max-w-md text-sm leading-relaxed opacity-95 md:text-base">
                 Na La Crème Bakery cada torta, bolo e macaron nasce de receitas tradicionais
                 francesas, manteiga de verdade e fornadas pequenas — sempre frescas.
               </p>
