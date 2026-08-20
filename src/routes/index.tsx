@@ -84,12 +84,6 @@ function Index() {
                 Na La Crème Bakery cada torta, bolo e macaron nasce de receitas tradicionais
                 francesas, manteiga de verdade e fornadas pequenas — sempre frescas.
               </p>
-              <Link
-                to="/catalogo"
-                className="mt-9 inline-flex items-center justify-center rounded-full border border-background bg-background px-8 py-3.5 text-xs tracking-[0.22em] uppercase text-foreground transition-colors hover:bg-transparent hover:text-background"
-              >
-                Ver catálogo
-              </Link>
             </div>
           </div>
         </div>
