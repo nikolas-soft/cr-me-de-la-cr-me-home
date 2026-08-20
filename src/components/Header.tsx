@@ -13,13 +13,13 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b-2 border-cherry/20 bg-background/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-5 md:h-[72px] lg:px-10">
-        <Link to="/" className="flex flex-col leading-none" onClick={() => setOpen(false)}>
-          <span className="font-display text-xl tracking-[0.18em] text-foreground md:text-2xl">
+        <Link to="/" className="group flex flex-col leading-none" onClick={() => setOpen(false)}>
+          <span className="font-display text-xl tracking-[0.18em] text-cherry transition-colors group-hover:text-cherry-light md:text-2xl">
             LA CRÈME
           </span>
-          <span className="eyebrow mt-0.5 text-muted-foreground">Bakery</span>
+          <span className="eyebrow mt-0.5 text-cherry/70">Bakery</span>
         </Link>
 
         <nav className="hidden items-center gap-9 md:flex">

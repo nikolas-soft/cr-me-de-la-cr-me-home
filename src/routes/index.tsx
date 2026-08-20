@@ -72,15 +72,17 @@ function Index() {
           height={1088}
           className="h-[68vh] min-h-[420px] w-full object-cover md:h-[80vh]"
         />
-        <div className="absolute inset-0 bg-foreground/45" />
+        <div className="gradient-cherry-creme absolute inset-0" />
         <div className="absolute inset-0 flex items-center">
           <div className="mx-auto w-full max-w-7xl px-5 lg:px-10">
             <div className="max-w-xl text-background">
-              <p className="eyebrow opacity-85">Confeitaria artesanal · desde 1998</p>
-              <h1 className="mt-5 font-display text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
+              <span className="inline-block rounded-sm bg-background/90 px-3 py-1.5 text-[10px] font-semibold tracking-[0.2em] text-cherry shadow-cherry-sm">
+                TRADIÇÃO FRANCESA · DESDE 1998
+              </span>
+              <h1 className="mt-6 font-display text-4xl leading-[1.05] drop-shadow-sm sm:text-5xl lg:text-6xl">
                 Doces clássicos, feitos à mão todos os dias
               </h1>
-              <p className="mt-5 max-w-md text-sm leading-relaxed opacity-90 md:text-base">
+              <p className="mt-5 max-w-md text-sm leading-relaxed opacity-95 md:text-base">
                 Na La Crème Bakery cada torta, bolo e macaron nasce de receitas tradicionais
                 francesas, manteiga de verdade e fornadas pequenas — sempre frescas.
               </p>
@@ -96,6 +98,11 @@ function Index() {
           <h2 className="mt-3 font-display text-3xl text-foreground md:text-4xl">
             Uma casa de doces, três caminhos
           </h2>
+          <div className="mx-auto mt-6 flex w-full max-w-md items-center gap-4">
+            <div className="h-px flex-1 bg-cherry/15" />
+            <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
+            <div className="h-px flex-1 bg-cherry/15" />
+          </div>
         </Reveal>
 
         <div className="mt-14 grid gap-7 md:grid-cols-3">
@@ -103,9 +110,9 @@ function Index() {
             <Reveal key={card.title} delay={i * 120}>
               <Link
                 to={card.to}
-                className="group block overflow-hidden rounded-3xl border border-border bg-cream-deep shadow-[var(--shadow-soft)] transition-transform duration-500 hover:-translate-y-1.5"
+                className="group card-cherry-accent block overflow-hidden rounded-3xl border border-border bg-cream-deep shadow-cherry-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-cherry"
               >
-                <div className="overflow-hidden">
+                <div className="relative overflow-hidden">
                   <img
                     src={card.image}
                     alt={card.title}
@@ -114,12 +121,15 @@ function Index() {
                     height={1100}
                     className="h-64 w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105 md:h-72"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-cherry/25 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
-                <div className="px-7 py-7">
+                <div className="relative px-7 py-7">
+                  <div className="absolute left-7 top-0 h-1 w-12 -translate-y-1/2 rounded-full bg-cherry/80 transition-all duration-500 group-hover:w-20 group-hover:bg-cherry" />
                   <h3 className="font-display text-2xl text-foreground">{card.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{card.text}</p>
-                  <span className="mt-5 inline-block text-xs tracking-[0.2em] uppercase text-foreground">
-                    Descobrir →
+                  <span className="mt-5 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-cherry transition-colors group-hover:text-cherry-light">
+                    Descobrir
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                   </span>
                 </div>
               </Link>
@@ -129,19 +139,23 @@ function Index() {
       </section>
 
       {/* Produtos */}
-      <section className="border-y border-border bg-cream-deep">
+      <section className="border-y-2 border-cherry/10 bg-cream-deep">
         <div className="mx-auto max-w-7xl px-5 py-20 lg:px-10 lg:py-28">
           <Reveal className="flex flex-col items-center text-center">
             <p className="eyebrow text-muted-foreground">Da nossa cozinha</p>
             <h2 className="mt-3 font-display text-3xl text-foreground md:text-4xl">Produtos</h2>
-            <div className="mt-6 h-px w-16 bg-border" />
+            <div className="mt-6 flex w-full max-w-md items-center gap-4">
+              <div className="h-px flex-1 bg-cherry/15" />
+              <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
+              <div className="h-px flex-1 bg-cherry/15" />
+            </div>
           </Reveal>
 
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((p, i) => (
               <Reveal key={p.name} delay={(i % 3) * 120}>
-                <article className="group overflow-hidden rounded-3xl border border-border bg-background">
-                  <div className="overflow-hidden">
+                <article className="group card-cherry-accent overflow-hidden rounded-3xl border border-border bg-background shadow-cherry-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-cherry">
+                  <div className="relative overflow-hidden">
                     <img
                       src={p.image}
                       alt={p.name}
@@ -150,10 +164,13 @@ function Index() {
                       height={800}
                       className="aspect-square w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
                     />
+                    <span className="absolute right-3 top-3 rounded-full bg-cherry px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-background opacity-0 shadow-cherry-sm transition-opacity duration-300 group-hover:opacity-100">
+                      Artesanal
+                    </span>
                   </div>
                   <div className="flex items-baseline justify-between gap-4 px-6 py-5">
                     <h3 className="font-display text-xl text-foreground">{p.name}</h3>
-                    <span className="text-sm tracking-wide text-muted-foreground">{p.price}</span>
+                    <span className="text-sm tracking-wide text-cherry font-medium">{p.price}</span>
                   </div>
                 </article>
               </Reveal>
@@ -163,7 +180,7 @@ function Index() {
           <Reveal className="mt-14 text-center">
             <Link
               to="/catalogo"
-              className="inline-flex items-center justify-center rounded-full border border-foreground px-8 py-3.5 text-xs tracking-[0.22em] uppercase text-foreground transition-colors hover:bg-foreground hover:text-background"
+              className="inline-flex items-center justify-center rounded-full border-2 border-cherry bg-background px-8 py-3.5 text-xs tracking-[0.22em] uppercase text-cherry transition-all hover:bg-cherry hover:text-background hover:shadow-cherry-sm"
             >
               Ver catálogo completo
             </Link>
@@ -174,6 +191,11 @@ function Index() {
       {/* Faixa final */}
       <section className="mx-auto max-w-3xl px-5 py-20 text-center lg:py-28">
         <Reveal>
+          <div className="mx-auto mb-8 flex w-full max-w-md items-center gap-4">
+            <div className="h-px flex-1 bg-cherry/15" />
+            <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
+            <div className="h-px flex-1 bg-cherry/15" />
+          </div>
           <p className="eyebrow text-muted-foreground">Feito à mão</p>
           <p className="mt-5 font-display text-2xl leading-relaxed text-foreground italic md:text-3xl">
             “Nada aqui é apressado. A massa descansa, o creme esfria e o forno faz o resto.”
