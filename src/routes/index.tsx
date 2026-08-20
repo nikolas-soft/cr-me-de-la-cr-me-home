@@ -139,19 +139,23 @@ function Index() {
       </section>
 
       {/* Produtos */}
-      <section className="border-y border-border bg-cream-deep">
+      <section className="border-y-2 border-cherry/10 bg-cream-deep">
         <div className="mx-auto max-w-7xl px-5 py-20 lg:px-10 lg:py-28">
           <Reveal className="flex flex-col items-center text-center">
             <p className="eyebrow text-muted-foreground">Da nossa cozinha</p>
             <h2 className="mt-3 font-display text-3xl text-foreground md:text-4xl">Produtos</h2>
-            <div className="mt-6 h-px w-16 bg-border" />
+            <div className="mt-6 flex w-full max-w-md items-center gap-4">
+              <div className="h-px flex-1 bg-cherry/15" />
+              <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
+              <div className="h-px flex-1 bg-cherry/15" />
+            </div>
           </Reveal>
 
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((p, i) => (
               <Reveal key={p.name} delay={(i % 3) * 120}>
-                <article className="group overflow-hidden rounded-3xl border border-border bg-background">
-                  <div className="overflow-hidden">
+                <article className="group card-cherry-accent overflow-hidden rounded-3xl border border-border bg-background shadow-cherry-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-cherry">
+                  <div className="relative overflow-hidden">
                     <img
                       src={p.image}
                       alt={p.name}
@@ -160,10 +164,13 @@ function Index() {
                       height={800}
                       className="aspect-square w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
                     />
+                    <span className="absolute right-3 top-3 rounded-full bg-cherry px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-background opacity-0 shadow-cherry-sm transition-opacity duration-300 group-hover:opacity-100">
+                      Artesanal
+                    </span>
                   </div>
                   <div className="flex items-baseline justify-between gap-4 px-6 py-5">
                     <h3 className="font-display text-xl text-foreground">{p.name}</h3>
-                    <span className="text-sm tracking-wide text-muted-foreground">{p.price}</span>
+                    <span className="text-sm tracking-wide text-cherry font-medium">{p.price}</span>
                   </div>
                 </article>
               </Reveal>
@@ -173,7 +180,7 @@ function Index() {
           <Reveal className="mt-14 text-center">
             <Link
               to="/catalogo"
-              className="inline-flex items-center justify-center rounded-full border border-foreground px-8 py-3.5 text-xs tracking-[0.22em] uppercase text-foreground transition-colors hover:bg-foreground hover:text-background"
+              className="inline-flex items-center justify-center rounded-full border-2 border-cherry bg-background px-8 py-3.5 text-xs tracking-[0.22em] uppercase text-cherry transition-all hover:bg-cherry hover:text-background hover:shadow-cherry-sm"
             >
               Ver catálogo completo
             </Link>
