@@ -139,22 +139,22 @@ function Index() {
       </section>
 
       {/* Produtos */}
-      <section className="border-y-2 border-cherry/10 bg-cream-deep">
+      <section className="border-y-2 border-cherry/30 bg-cherry text-background">
         <div className="mx-auto max-w-7xl px-5 py-20 lg:px-10 lg:py-28">
           <Reveal className="flex flex-col items-center text-center">
-            <p className="eyebrow text-muted-foreground">Da nossa cozinha</p>
-            <h2 className="mt-3 font-display text-3xl text-foreground md:text-4xl">Produtos</h2>
+            <p className="eyebrow text-background/70">Da nossa cozinha</p>
+            <h2 className="mt-3 font-display text-3xl text-background md:text-4xl">Produtos</h2>
             <div className="mt-6 flex w-full max-w-md items-center gap-4">
-              <div className="h-px flex-1 bg-cherry/15" />
-              <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
-              <div className="h-px flex-1 bg-cherry/15" />
+              <div className="h-px flex-1 bg-background/25" />
+              <div className="h-1.5 w-1.5 rounded-full bg-background/60" />
+              <div className="h-px flex-1 bg-background/25" />
             </div>
           </Reveal>
 
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((p, i) => (
               <Reveal key={p.name} delay={(i % 3) * 120}>
-                <article className="group card-cherry-accent overflow-hidden rounded-3xl border border-border bg-background shadow-cherry-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-cherry">
+                <article className="group overflow-hidden rounded-3xl border-2 border-background/15 bg-background shadow-cherry transition-all duration-500 hover:-translate-y-1 hover:border-background/40">
                   <div className="relative overflow-hidden">
                     <img
                       src={p.image}
@@ -164,13 +164,15 @@ function Index() {
                       height={800}
                       className="aspect-square w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
                     />
-                    <span className="absolute right-3 top-3 rounded-full bg-cherry px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-background opacity-0 shadow-cherry-sm transition-opacity duration-300 group-hover:opacity-100">
+                    <span className="absolute right-3 top-3 rounded-full bg-cherry px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-background shadow-cherry-sm transition-opacity duration-300">
                       Artesanal
                     </span>
                   </div>
-                  <div className="flex items-baseline justify-between gap-4 px-6 py-5">
-                    <h3 className="font-display text-xl text-foreground">{p.name}</h3>
-                    <span className="text-sm tracking-wide text-cherry font-medium">{p.price}</span>
+                  <div className="flex items-baseline justify-between gap-4 border-t-4 border-cherry px-6 py-5">
+                    <h3 className="font-display text-xl text-cherry">{p.name}</h3>
+                    <span className="rounded-full bg-cherry px-3 py-1 text-xs font-medium tracking-wide text-background">
+                      {p.price}
+                    </span>
                   </div>
                 </article>
               </Reveal>
@@ -180,7 +182,7 @@ function Index() {
           <Reveal className="mt-14 text-center">
             <Link
               to="/catalogo"
-              className="inline-flex items-center justify-center rounded-full border-2 border-cherry bg-background px-8 py-3.5 text-xs tracking-[0.22em] uppercase text-cherry transition-all hover:bg-cherry hover:text-background hover:shadow-cherry-sm"
+              className="inline-flex items-center justify-center rounded-full border-2 border-background bg-background px-8 py-3.5 text-xs tracking-[0.22em] uppercase text-cherry transition-all hover:bg-cherry hover:text-background"
             >
               Ver catálogo completo
             </Link>
@@ -189,18 +191,20 @@ function Index() {
       </section>
 
       {/* Faixa final */}
-      <section className="mx-auto max-w-3xl px-5 py-20 text-center lg:py-28">
+      <section className="mx-auto max-w-5xl px-5 py-20 lg:py-28">
         <Reveal>
-          <div className="mx-auto mb-8 flex w-full max-w-md items-center gap-4">
-            <div className="h-px flex-1 bg-cherry/15" />
-            <div className="h-1.5 w-1.5 rounded-full bg-cherry/40" />
-            <div className="h-px flex-1 bg-cherry/15" />
+          <div className="rounded-[2rem] border-2 border-cherry bg-cherry px-7 py-14 text-center text-background shadow-cherry md:px-16">
+            <div className="mx-auto mb-8 flex w-full max-w-md items-center gap-4">
+              <div className="h-px flex-1 bg-background/25" />
+              <div className="h-1.5 w-1.5 rounded-full bg-background/60" />
+              <div className="h-px flex-1 bg-background/25" />
+            </div>
+            <p className="eyebrow text-background/70">Feito à mão</p>
+            <p className="mt-5 font-display text-2xl italic leading-relaxed md:text-3xl">
+              “Nada aqui é apressado. A massa descansa, o creme esfria e o forno faz o resto.”
+            </p>
+            <p className="mt-6 text-sm text-background/70">Chef Hélène Duarte · La Crème Bakery</p>
           </div>
-          <p className="eyebrow text-muted-foreground">Feito à mão</p>
-          <p className="mt-5 font-display text-2xl leading-relaxed text-foreground italic md:text-3xl">
-            “Nada aqui é apressado. A massa descansa, o creme esfria e o forno faz o resto.”
-          </p>
-          <p className="mt-6 text-sm text-muted-foreground">Chef Hélène Duarte · La Crème Bakery</p>
         </Reveal>
       </section>
     </>
