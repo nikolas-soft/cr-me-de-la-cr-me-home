@@ -199,3 +199,58 @@
     transform: none;
   }
 }
+
+@utility gradient-cherry-creme {
+  background: linear-gradient(
+    to bottom,
+    oklch(0.2429 0.0962 32 / 0.78),
+    oklch(0.2429 0.0962 32 / 0.42) 55%,
+    oklch(0.8781 0.0327 85.5 / 0.95)
+  );
+}
+
+@utility divider-cherry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: oklch(0.2429 0.0962 32 / 0.18);
+  }
+
+  &::before {
+    margin-right: 0.25rem;
+  }
+
+  &::after {
+    margin-left: 0.25rem;
+  }
+}
+
+@utility card-cherry-accent {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      oklch(0.2429 0.0962 32 / 0.35),
+      oklch(0.7752 0.0083 92 / 0.6) 50%,
+      oklch(0.2429 0.0962 32 / 0.15)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
