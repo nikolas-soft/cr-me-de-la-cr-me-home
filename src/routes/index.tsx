@@ -110,7 +110,7 @@ function Index() {
             <Reveal key={card.title} delay={i * 120}>
               <Link
                 to={card.to}
-                className="group card-cherry-accent block overflow-hidden rounded-3xl border border-border bg-cream-deep shadow-cherry-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-cherry"
+                className="group card-cherry-accent block overflow-hidden rounded-3xl border-2 border-cherry/25 bg-cherry text-background shadow-cherry-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-cherry hover:shadow-cherry"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -123,11 +123,11 @@ function Index() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-cherry/25 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
-                <div className="relative px-7 py-7">
-                  <div className="absolute left-7 top-0 h-1 w-12 -translate-y-1/2 rounded-full bg-cherry/80 transition-all duration-500 group-hover:w-20 group-hover:bg-cherry" />
-                  <h3 className="font-display text-2xl text-foreground">{card.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{card.text}</p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-cherry transition-colors group-hover:text-cherry-light">
+                <div className="relative bg-cherry px-7 py-7">
+                  <div className="absolute left-7 top-0 h-1 w-12 -translate-y-1/2 rounded-full bg-background/70 transition-all duration-500 group-hover:w-20 group-hover:bg-background" />
+                  <h3 className="font-display text-2xl text-background">{card.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-background/75">{card.text}</p>
+                  <span className="mt-5 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-background/90 transition-colors group-hover:text-background">
                     Descobrir
                     <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                   </span>
