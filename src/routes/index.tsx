@@ -47,13 +47,15 @@ const cards = [
 ];
 
 const products = [
-  { name: "Cinnamon Roll", price: "R$ 18,00", image: prodCinnamon },
-  { name: "Tiramisu", price: "R$ 26,00", image: prodTiramisu },
-  { name: "Torta de Cereja", price: "R$ 32,00", image: prodCereja },
-  { name: "Macarons (6 un.)", price: "R$ 45,00", image: prodMacarons },
-  { name: "Croissant de Manteiga", price: "R$ 14,00", image: prodCroissant },
-  { name: "Tartelette de Limão", price: "R$ 22,00", image: prodLimao },
-];
+  "cinnamon-roll",
+  "tiramisu",
+  "torta-de-cereja",
+  "macarons-sortidos",
+  "croissant-de-manteiga",
+  "tartelette-de-limao",
+]
+  .map((slug) => allProducts.find((p) => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
 function Index() {
   return (
