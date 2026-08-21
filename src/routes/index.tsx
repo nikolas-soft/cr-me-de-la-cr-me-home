@@ -150,8 +150,12 @@ function Index() {
 
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((p, i) => (
-              <Reveal key={p.name} delay={(i % 3) * 120}>
-                <article className="group overflow-hidden rounded-3xl border-2 border-background/15 bg-background shadow-cherry transition-all duration-500 hover:-translate-y-1 hover:border-background/40">
+              <Reveal key={p.slug} delay={(i % 3) * 120}>
+                <Link
+                  to="/produto/$slug"
+                  params={{ slug: p.slug }}
+                  className="group block overflow-hidden rounded-3xl border-2 border-background/15 bg-background shadow-cherry transition-all duration-500 hover:-translate-y-1 hover:border-background/40"
+                >
                   <div className="relative overflow-hidden">
                     <img
                       src={p.image}
@@ -168,10 +172,10 @@ function Index() {
                   <div className="flex items-baseline justify-between gap-4 border-t-4 border-cherry px-6 py-5">
                     <h3 className="font-display text-xl text-cherry">{p.name}</h3>
                     <span className="rounded-full bg-cherry px-3 py-1 text-xs font-medium tracking-wide text-background">
-                      {p.price}
+                      {formatPrice(p.price)}
                     </span>
                   </div>
-                </article>
+                </Link>
               </Reveal>
             ))}
           </div>
