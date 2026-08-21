@@ -14,6 +14,7 @@ import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as ClubeRouteImport } from './routes/clube'
 import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const SobreRoute = SobreRouteImport.update({
   path: '/sobre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
+  id: '/produto/$slug',
+  path: '/produto/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/catalogo': typeof CatalogoRoute
   '/clube': typeof ClubeRoute
   '/sobre': typeof SobreRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/catalogo': typeof CatalogoRoute
   '/clube': typeof ClubeRoute
   '/sobre': typeof SobreRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,22 @@ export interface FileRoutesById {
   '/catalogo': typeof CatalogoRoute
   '/clube': typeof ClubeRoute
   '/sobre': typeof SobreRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/carrinho' | '/catalogo' | '/clube' | '/sobre'
+  fullPaths:
+    '/' | '/carrinho' | '/catalogo' | '/clube' | '/sobre' | '/produto/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/carrinho' | '/catalogo' | '/clube' | '/sobre'
-  id: '__root__' | '/' | '/carrinho' | '/catalogo' | '/clube' | '/sobre'
+  to: '/' | '/carrinho' | '/catalogo' | '/clube' | '/sobre' | '/produto/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/carrinho'
+    | '/catalogo'
+    | '/clube'
+    | '/sobre'
+    | '/produto/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +94,7 @@ export interface RootRouteChildren {
   CatalogoRoute: typeof CatalogoRoute
   ClubeRoute: typeof ClubeRoute
   SobreRoute: typeof SobreRoute
+  ProdutoSlugRoute: typeof ProdutoSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SobreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/produto/$slug': {
+      id: '/produto/$slug'
+      path: '/produto/$slug'
+      fullPath: '/produto/$slug'
+      preLoaderRoute: typeof ProdutoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +150,7 @@ const rootRouteChildren: RootRouteChildren = {
   CatalogoRoute: CatalogoRoute,
   ClubeRoute: ClubeRoute,
   SobreRoute: SobreRoute,
+  ProdutoSlugRoute: ProdutoSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

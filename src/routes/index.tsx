@@ -4,12 +4,7 @@ import hero from "../assets/hero.jpg";
 import cardSobre from "../assets/card-sobre.jpg";
 import cardCatalogo from "../assets/card-catalogo.jpg";
 import cardClube from "../assets/card-clube.jpg";
-import prodCinnamon from "../assets/prod-cinnamon.jpg";
-import prodTiramisu from "../assets/prod-tiramisu.jpg";
-import prodCereja from "../assets/prod-cereja.jpg";
-import prodMacarons from "../assets/prod-macarons.jpg";
-import prodCroissant from "../assets/prod-croissant.jpg";
-import prodLimao from "../assets/prod-limao.jpg";
+import { products as allProducts, formatPrice } from "../data/products";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -52,13 +47,15 @@ const cards = [
 ];
 
 const products = [
-  { name: "Cinnamon Roll", price: "R$ 18,00", image: prodCinnamon },
-  { name: "Tiramisu", price: "R$ 26,00", image: prodTiramisu },
-  { name: "Torta de Cereja", price: "R$ 32,00", image: prodCereja },
-  { name: "Macarons (6 un.)", price: "R$ 45,00", image: prodMacarons },
-  { name: "Croissant de Manteiga", price: "R$ 14,00", image: prodCroissant },
-  { name: "Tartelette de Limão", price: "R$ 22,00", image: prodLimao },
-];
+  "cinnamon-roll",
+  "tiramisu",
+  "torta-de-cereja",
+  "macarons-sortidos",
+  "croissant-de-manteiga",
+  "tartelette-de-limao",
+]
+  .map((slug) => allProducts.find((p) => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
 function Index() {
   return (
@@ -153,8 +150,12 @@ function Index() {
 
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((p, i) => (
-              <Reveal key={p.name} delay={(i % 3) * 120}>
-                <article className="group overflow-hidden rounded-3xl border-2 border-background/15 bg-background shadow-cherry transition-all duration-500 hover:-translate-y-1 hover:border-background/40">
+              <Reveal key={p.slug} delay={(i % 3) * 120}>
+                <Link
+                  to="/produto/$slug"
+                  params={{ slug: p.slug }}
+                  className="group block overflow-hidden rounded-3xl border-2 border-background/15 bg-background shadow-cherry transition-all duration-500 hover:-translate-y-1 hover:border-background/40"
+                >
                   <div className="relative overflow-hidden">
                     <img
                       src={p.image}
@@ -171,10 +172,10 @@ function Index() {
                   <div className="flex items-baseline justify-between gap-4 border-t-4 border-cherry px-6 py-5">
                     <h3 className="font-display text-xl text-cherry">{p.name}</h3>
                     <span className="rounded-full bg-cherry px-3 py-1 text-xs font-medium tracking-wide text-background">
-                      {p.price}
+                      {formatPrice(p.price)}
                     </span>
                   </div>
-                </article>
+                </Link>
               </Reveal>
             ))}
           </div>
