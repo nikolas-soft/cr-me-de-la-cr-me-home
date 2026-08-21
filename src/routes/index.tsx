@@ -4,7 +4,7 @@ import hero from "../assets/hero.jpg";
 import cardSobre from "../assets/card-sobre.jpg";
 import cardCatalogo from "../assets/card-catalogo.jpg";
 import cardClube from "../assets/card-clube.jpg";
-import { products as allProducts } from "../data/products";
+import { products as allProducts, formatPrice } from "../data/products";
 
 export const Route = createFileRoute("/")({
   head: () => ({
