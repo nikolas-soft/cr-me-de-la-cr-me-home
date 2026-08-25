@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "../components/Header";
+import { CartProvider } from "../lib/cart";
 import { Footer } from "../components/Footer";
 
 function NotFoundComponent() {
@@ -134,6 +135,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <CartProvider>
       <div className="flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">
@@ -142,6 +144,7 @@ function RootComponent() {
         </main>
         <Footer />
       </div>
+      </CartProvider>
     </QueryClientProvider>
   );
 }

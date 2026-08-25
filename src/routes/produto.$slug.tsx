@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ShoppingBag, Check } from "lucide-react";
 import { Reveal } from "../components/Reveal";
 import { ProductCard } from "../components/ProductCard";
+import { useCart } from "../lib/cart";
 import { formatPrice, getProductBySlug, products } from "../data/products";
 
 export const Route = createFileRoute("/produto/$slug")({
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/produto/$slug")({
 function ProdutoPage() {
   const { product } = Route.useLoaderData();
   const [added, setAdded] = useState(false);
+  const { add } = useCart();
 
   const related = products
     .filter((p) => p.category === product.category && p.slug !== product.slug)
@@ -93,7 +95,11 @@ function ProdutoPage() {
 
               <button
                 type="button"
-                onClick={() => setAdded(true)}
+                onClick={() => {
+                  add(product.slug);
+                  setAdded(true);
+                  setTimeout(() => setAdded(false), 2000);
+                }}
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-background bg-background px-8 py-3.5 text-xs uppercase tracking-[0.22em] text-cherry transition-all hover:bg-cherry hover:text-background sm:w-auto"
               >
                 {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}

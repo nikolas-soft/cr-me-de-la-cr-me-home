@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useCart } from "../lib/cart";
 import { Menu, X, ShoppingBag, Instagram, Facebook } from "lucide-react";
 
 const links = [
@@ -11,6 +12,7 @@ const links = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { count } = useCart();
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-cherry/20 bg-background/95 backdrop-blur-md">
@@ -59,7 +61,14 @@ export function Header() {
             aria-label="Carrinho"
             className="flex items-center gap-2 text-sm text-foreground transition-opacity hover:opacity-70"
           >
-            <ShoppingBag className="h-[18px] w-[18px]" />
+            <span className="relative">
+              <ShoppingBag className="h-[18px] w-[18px]" />
+              {count > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-cherry px-1 text-[10px] font-semibold leading-none text-background">
+                  {count}
+                </span>
+              )}
+            </span>
             <span className="hidden sm:inline">Carrinho</span>
           </Link>
           <button
