@@ -199,12 +199,13 @@ function CarrinhoPage() {
                 Frete grátis automático em pedidos acima de {formatPrice(FREE_SHIPPING_MIN)}.
               </p>
 
-              <button
-                type="button"
-                className="mt-7 w-full rounded-full border-2 border-background bg-background px-8 py-3.5 text-xs uppercase tracking-[0.22em] text-cherry transition-colors hover:bg-transparent hover:text-background"
+              <Link
+                to="/checkout"
+                className="mt-7 block w-full rounded-full border-2 border-background bg-background px-8 py-3.5 text-center text-xs uppercase tracking-[0.22em] text-cherry transition-colors hover:bg-transparent hover:text-background"
               >
                 Finalizar pedido
-              </button>
+              </Link>
+
               <button
                 type="button"
                 onClick={() => {
