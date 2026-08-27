@@ -98,11 +98,60 @@ function CheckoutPage() {
   const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
   const [submitting, setSubmitting] = useState(false);
   const [order, setOrder] = useState<{ id: string; total: number; email: string } | null>(null);
+  const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
 
   const set = (key: FieldKey) => (v: string) => {
     setForm((p) => ({ ...p, [key]: v }));
     setErrors((p) => ({ ...p, [key]: undefined }));
+    if (key === "cep") void lookupCep(v);
   };
+
+  const lookupCep = async (raw: string) => {
+    const digits = raw.replace(/\D/g, "");
+    if (digits.length !== 8) {
+      setCepStatus("idle");
+      return;
+    }
+    setCepStatus("loading");
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
+      const data = (await res.json()) as {
+        erro?: boolean | string;
+        logradouro?: string;
+        complemento?: string;
+        bairro?: string;
+        localidade?: string;
+        uf?: string;
+      };
+      if (data.erro) {
+        setCepStatus("error");
+        setErrors((p) => ({ ...p, cep: "CEP não encontrado." }));
+        return;
+      }
+      setForm((p) => ({
+        ...p,
+        endereco: data.logradouro
+          ? data.bairro
+            ? `${data.logradouro} — ${data.bairro}`
+            : data.logradouro
+          : p.endereco,
+        cidade: data.localidade ?? p.cidade,
+        estado: (data.uf ?? p.estado).toUpperCase(),
+      }));
+      setErrors((p) => {
+        const next = { ...p };
+        delete next.cep;
+        delete next.endereco;
+        delete next.cidade;
+        delete next.estado;
+        return next;
+      });
+      setCepStatus("ok");
+    } catch {
+      setCepStatus("error");
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -192,7 +241,14 @@ function CheckoutPage() {
             <legend className="px-2 font-display text-2xl text-cherry">Entrega</legend>
             <div className="mt-4 grid gap-5 sm:grid-cols-6">
               <div className="sm:col-span-2">
-                <Field id="cep" label="CEP" value={form.cep} error={errors.cep} onChange={set("cep")} autoComplete="postal-code" placeholder="00000-000" maxLength={9} />
+                <Field id="cep" label="CEP" value={form.cep} error={errors.cep} onChange={set("cep")} autoComplete="postal-code" placeholder="00000-000" maxLength={9} inputMode="numeric" />
+                {cepStatus === "loading" && (
+                  <p className="mt-1.5 text-xs text-muted-foreground">Buscando endereço…</p>
+                )}
+                {cepStatus === "ok" && (
+                  <p className="mt-1.5 text-xs text-cherry/70">Endereço preenchido automaticamente.</p>
+                )}
+
               </div>
               <div className="sm:col-span-4">
                 <Field id="endereco" label="Endereço" value={form.endereco} error={errors.endereco} onChange={set("endereco")} autoComplete="address-line1" maxLength={160} />
