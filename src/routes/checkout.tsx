@@ -234,7 +234,14 @@ function CheckoutPage() {
             <legend className="px-2 font-display text-2xl text-cherry">Entrega</legend>
             <div className="mt-4 grid gap-5 sm:grid-cols-6">
               <div className="sm:col-span-2">
-                <Field id="cep" label="CEP" value={form.cep} error={errors.cep} onChange={set("cep")} autoComplete="postal-code" placeholder="00000-000" maxLength={9} />
+                <Field id="cep" label="CEP" value={form.cep} error={errors.cep} onChange={set("cep")} autoComplete="postal-code" placeholder="00000-000" maxLength={9} inputMode="numeric" />
+                {cepStatus === "loading" && (
+                  <p className="mt-1.5 text-xs text-muted-foreground">Buscando endereço…</p>
+                )}
+                {cepStatus === "ok" && (
+                  <p className="mt-1.5 text-xs text-cherry/70">Endereço preenchido automaticamente.</p>
+                )}
+
               </div>
               <div className="sm:col-span-4">
                 <Field id="endereco" label="Endereço" value={form.endereco} error={errors.endereco} onChange={set("endereco")} autoComplete="address-line1" maxLength={160} />
