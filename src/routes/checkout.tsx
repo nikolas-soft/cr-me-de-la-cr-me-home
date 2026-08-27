@@ -71,7 +71,7 @@ function Field({
   id: FieldKey;
   label: string;
   value: string;
-  error?: string;
+  error?: string | undefined;
   onChange: (v: string) => void;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "id" | "value" | "onChange">) {
   return (
