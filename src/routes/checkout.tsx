@@ -138,7 +138,14 @@ function CheckoutPage() {
         cidade: data.localidade ?? p.cidade,
         estado: (data.uf ?? p.estado).toUpperCase(),
       }));
-      setErrors((p) => ({ ...p, cep: undefined, endereco: undefined, cidade: undefined, estado: undefined }));
+      setErrors((p) => {
+        const next = { ...p };
+        delete next.cep;
+        delete next.endereco;
+        delete next.cidade;
+        delete next.estado;
+        return next;
+      });
       setCepStatus("ok");
     } catch {
       setCepStatus("error");
