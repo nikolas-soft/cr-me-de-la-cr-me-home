@@ -98,11 +98,53 @@ function CheckoutPage() {
   const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
   const [submitting, setSubmitting] = useState(false);
   const [order, setOrder] = useState<{ id: string; total: number; email: string } | null>(null);
+  const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
 
   const set = (key: FieldKey) => (v: string) => {
     setForm((p) => ({ ...p, [key]: v }));
     setErrors((p) => ({ ...p, [key]: undefined }));
+    if (key === "cep") void lookupCep(v);
   };
+
+  const lookupCep = async (raw: string) => {
+    const digits = raw.replace(/\D/g, "");
+    if (digits.length !== 8) {
+      setCepStatus("idle");
+      return;
+    }
+    setCepStatus("loading");
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
+      const data = (await res.json()) as {
+        erro?: boolean | string;
+        logradouro?: string;
+        complemento?: string;
+        bairro?: string;
+        localidade?: string;
+        uf?: string;
+      };
+      if (data.erro) {
+        setCepStatus("error");
+        setErrors((p) => ({ ...p, cep: "CEP não encontrado." }));
+        return;
+      }
+      setForm((p) => ({
+        ...p,
+        endereco: data.logradouro
+          ? data.bairro
+            ? `${data.logradouro} — ${data.bairro}`
+            : data.logradouro
+          : p.endereco,
+        cidade: data.localidade ?? p.cidade,
+        estado: (data.uf ?? p.estado).toUpperCase(),
+      }));
+      setErrors((p) => ({ ...p, cep: undefined, endereco: undefined, cidade: undefined, estado: undefined }));
+      setCepStatus("ok");
+    } catch {
+      setCepStatus("error");
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
