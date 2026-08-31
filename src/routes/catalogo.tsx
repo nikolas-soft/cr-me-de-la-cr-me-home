@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { Reveal } from "../components/Reveal";
 import { ProductCard } from "../components/ProductCard";
-import { categories, products, type Category } from "../data/products";
+import { getCatalog } from "../lib/catalog.functions";
+import { categories, products as mockProducts, type Category } from "../data/products";
 
 export const Route = createFileRoute("/catalogo")({
   head: () => ({
@@ -28,6 +30,16 @@ function Catalogo() {
   const [category, setCategory] = useState<Category>("Todos");
   const [query, setQuery] = useState("");
 
+  // Se a API não estiver configurada (ou falhar), seguimos com os dados mockados.
+  const { data } = useQuery({
+    queryKey: ["catalog"],
+    queryFn: () => getCatalog(),
+    initialData: { source: "mock" as const, products: mockProducts },
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+  });
+  const products = data.products.length > 0 ? data.products : mockProducts;
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return products.filter((p) => {
@@ -39,7 +51,7 @@ function Catalogo() {
         p.category.toLowerCase().includes(q);
       return matchCategory && matchQuery;
     });
-  }, [category, query]);
+  }, [category, query, products]);
 
   return (
     <>
