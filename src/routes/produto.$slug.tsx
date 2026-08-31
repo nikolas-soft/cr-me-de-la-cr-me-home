@@ -4,6 +4,7 @@ import { ShoppingBag, Check } from "lucide-react";
 import { Reveal } from "../components/Reveal";
 import { ProductCard } from "../components/ProductCard";
 import { useCart } from "../lib/cart";
+import { getCatalog } from "../lib/catalog.functions";
 import { formatPrice, getProductBySlug, products } from "../data/products";
 
 export const Route = createFileRoute("/produto/$slug")({
@@ -43,13 +44,10 @@ export const Route = createFileRoute("/produto/$slug")({
 });
 
 function ProdutoPage() {
-  const { product } = Route.useLoaderData();
+  const { product, related } = Route.useLoaderData();
   const [added, setAdded] = useState(false);
   const { add } = useCart();
 
-  const related = products
-    .filter((p) => p.category === product.category && p.slug !== product.slug)
-    .slice(0, 3);
 
   return (
     <>
