@@ -7,10 +7,20 @@ import { useCart } from "../lib/cart";
 import { formatPrice, getProductBySlug, products } from "../data/products";
 
 export const Route = createFileRoute("/produto/$slug")({
-  loader: ({ params }) => {
-    const product = getProductBySlug(params.slug);
+  loader: async ({ params }) => {
+    let catalog = products;
+    try {
+      const result = await getCatalog();
+      if (result.products.length > 0) catalog = result.products;
+    } catch {
+      // API indisponível — seguimos com os dados mockados.
+    }
+    const product = catalog.find((p) => p.slug === params.slug) ?? getProductBySlug(params.slug);
     if (!product) throw notFound();
-    return { product };
+    const related = catalog
+      .filter((p) => p.category === product.category && p.slug !== product.slug)
+      .slice(0, 3);
+    return { product, related };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
