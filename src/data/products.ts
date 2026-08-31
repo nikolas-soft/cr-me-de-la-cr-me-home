@@ -4,6 +4,15 @@ import prodCereja from "../assets/prod-cereja.jpg";
 import prodMacarons from "../assets/prod-macarons.jpg";
 import prodCroissant from "../assets/prod-croissant.jpg";
 import prodLimao from "../assets/prod-limao.jpg";
+import prodCenoura from "../assets/prod-cenoura.jpg";
+import prodRedVelvet from "../assets/prod-redvelvet.jpg";
+import prodMaca from "../assets/prod-maca.jpg";
+import prodEclair from "../assets/prod-eclair.jpg";
+import prodCookieChoc from "../assets/prod-cookie-choc.jpg";
+import prodCookieAvela from "../assets/prod-cookie-avela.jpg";
+import prodBrownie from "../assets/prod-brownie.jpg";
+import prodBrownieNozes from "../assets/prod-brownie-nozes.jpg";
+import prodMousse from "../assets/prod-mousse.jpg";
 
 export const categories = [
   "Todos",
@@ -43,7 +52,7 @@ export const products: Product[] = [
     description:
       "Nosso clássico da casa: massa aerada de cenoura fresca, assada em forma alta e coberta com uma ganache espessa de chocolate belga 55%. Servido em fatias generosas.",
     price: 68,
-    image: prodCinnamon,
+    image: prodCenoura,
     ingredients: ["Cenoura fresca", "Ovos caipiras", "Farinha de trigo", "Chocolate belga 55%", "Manteiga francesa"],
   },
   {
@@ -54,7 +63,7 @@ export const products: Product[] = [
     description:
       "Três camadas de massa aveludada com cacau suave, intercaladas por creme de cream cheese batido na hora. Finalizado com farofa da própria massa.",
     price: 92,
-    image: prodCereja,
+    image: prodRedVelvet,
     ingredients: ["Cacau", "Cream cheese", "Buttermilk", "Baunilha Bourbon", "Manteiga francesa"],
   },
   {
@@ -98,7 +107,7 @@ export const products: Product[] = [
     description:
       "Maçãs fatiadas finas e caramelizadas com canela, assadas em massa quebradiça rústica com bordas dobradas à mão.",
     price: 38,
-    image: prodCinnamon,
+    image: prodMaca,
     ingredients: ["Maçã gala", "Canela do Ceilão", "Manteiga francesa", "Açúcar mascavo"],
   },
   {
@@ -120,7 +129,7 @@ export const products: Product[] = [
     description:
       "Massa choux assada até o ponto exato de crocância, preenchida com creme pâtissière de baunilha Bourbon e finalizada com fondant.",
     price: 19,
-    image: prodTiramisu,
+    image: prodEclair,
     ingredients: ["Baunilha Bourbon", "Leite integral", "Ovos caipiras", "Manteiga francesa"],
   },
   {
@@ -131,7 +140,7 @@ export const products: Product[] = [
     description:
       "Massa descansada por 48 horas, com generosos pedaços de chocolate belga e uma pitada de flor de sal por cima.",
     price: 14,
-    image: prodCinnamon,
+    image: prodCookieChoc,
     ingredients: ["Chocolate belga 55%", "Flor de sal", "Manteiga francesa", "Açúcar mascavo"],
   },
   {
@@ -142,7 +151,7 @@ export const products: Product[] = [
     description:
       "Avelãs tostadas na casa, moídas grosseiramente e misturadas a chocolate ao leite em uma massa amanteigada.",
     price: 15,
-    image: prodTiramisu,
+    image: prodCookieAvela,
     ingredients: ["Avelã", "Chocolate ao leite", "Manteiga francesa", "Ovos caipiras"],
   },
   {
@@ -175,7 +184,7 @@ export const products: Product[] = [
     description:
       "Chocolate belga derretido na manteiga, batido apenas o necessário para manter o miolo úmido e a casquinha espelhada.",
     price: 16,
-    image: prodTiramisu,
+    image: prodBrownie,
     ingredients: ["Chocolate belga 70%", "Manteiga francesa", "Ovos caipiras", "Cacau"],
   },
   {
@@ -186,7 +195,7 @@ export const products: Product[] = [
     description:
       "Nosso brownie clássico com nozes tostadas incorporadas à massa e espalhadas por cima antes de assar.",
     price: 18,
-    image: prodCinnamon,
+    image: prodBrownieNozes,
     ingredients: ["Chocolate belga 70%", "Nozes", "Manteiga francesa", "Açúcar mascavo"],
   },
   {
@@ -230,7 +239,7 @@ export const products: Product[] = [
     description:
       "Chocolate belga 70% batido com creme de leite fresco e claras em neve, servido em pote de vidro com raspas de cacau.",
     price: 21,
-    image: prodCereja,
+    image: prodMousse,
     ingredients: ["Chocolate belga 70%", "Creme de leite fresco", "Ovos caipiras", "Baunilha Bourbon"],
   },
 ];
