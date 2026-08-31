@@ -4,13 +4,24 @@ import { ShoppingBag, Check } from "lucide-react";
 import { Reveal } from "../components/Reveal";
 import { ProductCard } from "../components/ProductCard";
 import { useCart } from "../lib/cart";
+import { getCatalog } from "../lib/catalog.functions";
 import { formatPrice, getProductBySlug, products } from "../data/products";
 
 export const Route = createFileRoute("/produto/$slug")({
-  loader: ({ params }) => {
-    const product = getProductBySlug(params.slug);
+  loader: async ({ params }) => {
+    let catalog = products;
+    try {
+      const result = await getCatalog();
+      if (result.products.length > 0) catalog = result.products;
+    } catch {
+      // API indisponível — seguimos com os dados mockados.
+    }
+    const product = catalog.find((p) => p.slug === params.slug) ?? getProductBySlug(params.slug);
     if (!product) throw notFound();
-    return { product };
+    const related = catalog
+      .filter((p) => p.category === product.category && p.slug !== product.slug)
+      .slice(0, 3);
+    return { product, related };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
@@ -33,13 +44,10 @@ export const Route = createFileRoute("/produto/$slug")({
 });
 
 function ProdutoPage() {
-  const { product } = Route.useLoaderData();
+  const { product, related } = Route.useLoaderData();
   const [added, setAdded] = useState(false);
   const { add } = useCart();
 
-  const related = products
-    .filter((p) => p.category === product.category && p.slug !== product.slug)
-    .slice(0, 3);
 
   return (
     <>
