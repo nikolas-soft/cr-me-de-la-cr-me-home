@@ -144,6 +144,11 @@ function RootComponent() {
         </main>
         <Footer />
       </div>
+      {/* Moldura decorativa fina em cherry ao redor de todas as páginas */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[60] border-[6px] border-cherry/60"
+      />
       </CartProvider>
     </QueryClientProvider>
   );
