@@ -4,6 +4,7 @@ import { CheckCircle2, Lock, ShoppingBag } from "lucide-react";
 import { z } from "zod";
 import { formatPrice } from "../data/products";
 import { useCart, FREE_SHIPPING_MIN } from "../lib/cart";
+import { registrarCompraNaAdmin } from "../lib/clientes";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -169,6 +170,8 @@ function CheckoutPage() {
     // Nenhum gateway configurado: fluxo simulado.
     await new Promise((r) => setTimeout(r, 900));
     const id = `LC-${Math.floor(100000 + Math.random() * 900000)}`;
+    const resumoProdutos = cart.items.map((i) => `${i.qty}x ${i.product.name}`).join(", ");
+    registrarCompraNaAdmin(parsed.data.nome, parsed.data.email, resumoProdutos, cart.total);
     setOrder({ id, total: cart.total, email: parsed.data.email });
     cart.clear();
     setSubmitting(false);
