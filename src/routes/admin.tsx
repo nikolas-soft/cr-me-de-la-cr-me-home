@@ -135,6 +135,76 @@ function AdminPage() {
     e.target.value = "";
   };
 
+  const handleImportarCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const texto = String(event.target?.result ?? "").replace(/^\uFEFF/, "");
+        // Separa linhas preservando campos entre aspas (que podem conter ponto e vírgula).
+        const linhas: string[][] = [];
+        let campo = "";
+        let registro: string[] = [];
+        let entreAspas = false;
+        for (let i = 0; i < texto.length; i++) {
+          const ch = texto[i];
+          if (entreAspas) {
+            if (ch === '"') {
+              if (texto[i + 1] === '"') {
+                campo += '"';
+                i++;
+              } else {
+                entreAspas = false;
+              }
+            } else {
+              campo += ch;
+            }
+          } else if (ch === '"') {
+            entreAspas = true;
+          } else if (ch === ";") {
+            registro.push(campo);
+            campo = "";
+          } else if (ch === "\n" || ch === "\r") {
+            if (ch === "\r" && texto[i + 1] === "\n") i++;
+            registro.push(campo);
+            campo = "";
+            if (registro.some((v) => v.trim() !== "")) linhas.push(registro);
+            registro = [];
+          } else {
+            campo += ch;
+          }
+        }
+        registro.push(campo);
+        if (registro.some((v) => v.trim() !== "")) linhas.push(registro);
+
+        if (linhas.length < 2) {
+          avisar("Arquivo CSV vazio ou sem dados.", false);
+          return;
+        }
+        const dados = linhas.slice(1).map((col) => ({
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+          nome: col[0]?.trim() ?? "",
+          email: col[1]?.trim() ?? "",
+          produtoComprado: col[2]?.trim() ?? "",
+          valorGasto: parseFloat((col[3] ?? "0").replace(/\./g, "").replace(",", ".")) || 0,
+          dataCompra: col[4]?.trim() ?? "",
+        }));
+        const validos = dados.filter((d) => d.nome || d.email);
+        if (validos.length === 0) {
+          avisar("Nenhuma venda válida encontrada no CSV.", false);
+          return;
+        }
+        salvarListaLocal(validos);
+        avisar(`${validos.length} venda(s) importada(s) do CSV com sucesso!`);
+      } catch {
+        avisar("Erro ao ler o arquivo CSV.", false);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
   const handleRemover = (id: string) => {
     salvarListaLocal(clientes.filter((c) => c.id !== id));
     avisar("Registro removido.");
