@@ -30,6 +30,7 @@ function AdminPage() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [mensagem, setMensagem] = useState<{ texto: string; ok: boolean } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const csvFileRef = useRef<HTMLInputElement>(null);
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -135,6 +136,76 @@ function AdminPage() {
     e.target.value = "";
   };
 
+  const handleImportarCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const texto = String(event.target?.result ?? "").replace(/^\uFEFF/, "");
+        // Separa linhas preservando campos entre aspas (que podem conter ponto e vírgula).
+        const linhas: string[][] = [];
+        let campo = "";
+        let registro: string[] = [];
+        let entreAspas = false;
+        for (let i = 0; i < texto.length; i++) {
+          const ch = texto[i];
+          if (entreAspas) {
+            if (ch === '"') {
+              if (texto[i + 1] === '"') {
+                campo += '"';
+                i++;
+              } else {
+                entreAspas = false;
+              }
+            } else {
+              campo += ch;
+            }
+          } else if (ch === '"') {
+            entreAspas = true;
+          } else if (ch === ";") {
+            registro.push(campo);
+            campo = "";
+          } else if (ch === "\n" || ch === "\r") {
+            if (ch === "\r" && texto[i + 1] === "\n") i++;
+            registro.push(campo);
+            campo = "";
+            if (registro.some((v) => v.trim() !== "")) linhas.push(registro);
+            registro = [];
+          } else {
+            campo += ch;
+          }
+        }
+        registro.push(campo);
+        if (registro.some((v) => v.trim() !== "")) linhas.push(registro);
+
+        if (linhas.length < 2) {
+          avisar("Arquivo CSV vazio ou sem dados.", false);
+          return;
+        }
+        const dados = linhas.slice(1).map((col) => ({
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+          nome: col[0]?.trim() ?? "",
+          email: col[1]?.trim() ?? "",
+          produtoComprado: col[2]?.trim() ?? "",
+          valorGasto: parseFloat((col[3] ?? "0").replace(/\./g, "").replace(",", ".")) || 0,
+          dataCompra: col[4]?.trim() ?? "",
+        }));
+        const validos = dados.filter((d) => d.nome || d.email);
+        if (validos.length === 0) {
+          avisar("Nenhuma venda válida encontrada no CSV.", false);
+          return;
+        }
+        salvarListaLocal(validos);
+        avisar(`${validos.length} venda(s) importada(s) do CSV com sucesso!`);
+      } catch {
+        avisar("Erro ao ler o arquivo CSV.", false);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
   const handleRemover = (id: string) => {
     salvarListaLocal(clientes.filter((c) => c.id !== id));
     avisar("Registro removido.");
@@ -214,29 +285,20 @@ function AdminPage() {
         </button>
       </form>
 
-      {/* Ações de arquivo */}
-      <div className="mt-6 flex flex-wrap items-center gap-3">
+      {/* Ações de arquivo: exportação com sua importação correspondente */}
+      <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-3">
         <button
           type="button"
           onClick={handleExportarTXT}
-          className="inline-flex items-center gap-2 rounded-full border-2 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
+          className="inline-flex items-center gap-2 rounded-l-full border-2 border-r-0 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
         >
           <Download className="h-4 w-4" />
           Exportar TXT
         </button>
         <button
           type="button"
-          onClick={handleExportarCSV}
-          className="inline-flex items-center gap-2 rounded-full border-2 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
-        >
-          <Table2 className="h-4 w-4" />
-          Exportar CSV
-        </button>
-
-        <button
-          type="button"
           onClick={() => fileRef.current?.click()}
-          className="inline-flex items-center gap-2 rounded-full border-2 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
+          className="inline-flex items-center gap-2 rounded-r-full border-2 border-l-0 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
         >
           <Upload className="h-4 w-4" />
           Importar TXT
@@ -249,6 +311,32 @@ function AdminPage() {
           className="hidden"
           aria-label="Importar arquivo TXT"
         />
+
+        <button
+          type="button"
+          onClick={handleExportarCSV}
+          className="ml-3 inline-flex items-center gap-2 rounded-l-full border-2 border-r-0 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
+        >
+          <Table2 className="h-4 w-4" />
+          Exportar CSV
+        </button>
+        <button
+          type="button"
+          onClick={() => csvFileRef.current?.click()}
+          className="inline-flex items-center gap-2 rounded-r-full border-2 border-l-0 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
+        >
+          <Upload className="h-4 w-4" />
+          Importar CSV
+        </button>
+        <input
+          ref={csvFileRef}
+          type="file"
+          accept=".csv"
+          onChange={handleImportarCSV}
+          className="hidden"
+          aria-label="Importar arquivo CSV"
+        />
+
         <span className="ml-auto inline-flex items-center gap-2 text-sm text-muted-foreground">
           <Users className="h-4 w-4" />
           {clientes.length} registro{clientes.length === 1 ? "" : "s"} · Total{" "}
