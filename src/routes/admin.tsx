@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Download, Upload, Trash2, Users } from "lucide-react";
+import { Download, Table2, Trash2, Upload, Users } from "lucide-react";
 import { loadClientes, saveClientes, type Cliente } from "../lib/clientes";
 import { formatPrice } from "../data/products";
 
@@ -81,9 +81,38 @@ function AdminPage() {
     link.href = url;
     link.download = "relatorio_clientes.txt";
     link.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 30_000);
     avisar("Arquivo exportado com sucesso!");
   };
+
+  const handleExportarCSV = () => {
+    if (clientes.length === 0) {
+      avisar("Nenhum cliente cadastrado para exportar.", false);
+      return;
+    }
+    const esc = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
+    const cabecalho = ["Nome", "E-mail", "Produto", "Valor", "Data"].join(";");
+    const linhas = clientes.map((c) =>
+      [
+        esc(c.nome),
+        esc(c.email),
+        esc(c.produtoComprado),
+        esc(c.valorGasto.toFixed(2).replace(".", ",")),
+        esc(c.dataCompra),
+      ].join(";"),
+    );
+    // O BOM no início faz o Excel abrir os acentos corretamente.
+    const conteudo = "\uFEFF" + [cabecalho, ...linhas].join("\r\n");
+    const blob = new Blob([conteudo], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "relatorio_clientes.csv";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 30_000);
+    avisar("Planilha CSV exportada com sucesso!");
+  };
+
 
   const handleImportarTXT = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -195,6 +224,15 @@ function AdminPage() {
           <Download className="h-4 w-4" />
           Exportar TXT
         </button>
+        <button
+          type="button"
+          onClick={handleExportarCSV}
+          className="inline-flex items-center gap-2 rounded-full border-2 border-cherry px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
+        >
+          <Table2 className="h-4 w-4" />
+          Exportar CSV
+        </button>
+
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
