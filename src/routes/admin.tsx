@@ -37,6 +37,7 @@ function AdminPage() {
   const [produto, setProduto] = useState("");
   const [valor, setValor] = useState("");
   const [busca, setBusca] = useState("");
+  const [ordem, setOrdem] = useState<"" | "az" | "za" | "cresc" | "decresc">("");
 
   useEffect(() => {
     setClientes(loadClientes());
@@ -217,13 +218,20 @@ function AdminPage() {
   const normalizar = (s: string) =>
     s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const termo = normalizar(busca.trim());
-  const clientesFiltrados = termo
+  const filtrados = termo
     ? clientes.filter((c) =>
         normalizar(
           [c.nome, c.email, c.produtoComprado, formatPrice(c.valorGasto), c.dataCompra].join(" "),
         ).includes(termo),
       )
     : clientes;
+  const clientesFiltrados = [...filtrados].sort((a, b) => {
+    if (ordem === "az") return a.nome.localeCompare(b.nome, "pt-BR");
+    if (ordem === "za") return b.nome.localeCompare(a.nome, "pt-BR");
+    if (ordem === "cresc") return a.valorGasto - b.valorGasto;
+    if (ordem === "decresc") return b.valorGasto - a.valorGasto;
+    return 0;
+  });
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-14 lg:px-10">
@@ -358,14 +366,28 @@ function AdminPage() {
 
       {/* Filtro */}
       <div className="mt-6">
-        <input
-          type="search"
-          placeholder="Pesquisar por nome, e-mail, produto, valor ou data..."
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          className={inputClass}
-          aria-label="Pesquisar vendas"
-        />
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <input
+            type="search"
+            placeholder="Pesquisar por nome, e-mail, produto, valor ou data..."
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            className={inputClass}
+            aria-label="Pesquisar vendas"
+          />
+          <select
+            value={ordem}
+            onChange={(e) => setOrdem(e.target.value as typeof ordem)}
+            className={`${inputClass} sm:w-56`}
+            aria-label="Ordenar tabela"
+          >
+            <option value="">Ordem de cadastro</option>
+            <option value="az">Nome: A → Z</option>
+            <option value="za">Nome: Z → A</option>
+            <option value="cresc">Valor: crescente</option>
+            <option value="decresc">Valor: decrescente</option>
+          </select>
+        </div>
         {busca && (
           <p className="mt-2 text-xs text-muted-foreground">
             {clientesFiltrados.length} de {clientes.length} registro(s) encontrados
