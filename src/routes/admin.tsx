@@ -298,7 +298,9 @@ function AdminPage() {
         onSubmit={handleSubmit}
         className="mt-8 grid gap-4 rounded-3xl border-2 border-cherry/25 bg-card p-6 shadow-cherry-sm sm:grid-cols-2"
       >
-        <h2 className="font-display text-2xl text-cherry sm:col-span-2">Cadastrar venda</h2>
+        <h2 className="font-display text-2xl text-cherry sm:col-span-2">
+          {editandoId ? "Editar venda" : "Cadastrar venda"}
+        </h2>
         <input
           type="text"
           placeholder="Nome do cliente"
@@ -333,12 +335,23 @@ function AdminPage() {
           className={inputClass}
           aria-label="Valor gasto"
         />
-        <button
-          type="submit"
-          className="rounded-full bg-cherry px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-background transition-opacity hover:opacity-90 sm:col-span-2"
-        >
-          Cadastrar cliente
-        </button>
+        <div className="flex gap-3 sm:col-span-2">
+          <button
+            type="submit"
+            className="flex-1 rounded-full bg-cherry px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-background transition-opacity hover:opacity-90"
+          >
+            {editandoId ? "Salvar alterações" : "Cadastrar cliente"}
+          </button>
+          {editandoId && (
+            <button
+              type="button"
+              onClick={cancelarEdicao}
+              className="rounded-full border-2 border-cherry px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
+            >
+              Cancelar
+            </button>
+          )}
+        </div>
       </form>
 
       {/* Ações de arquivo: exportação com sua importação correspondente */}
