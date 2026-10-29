@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Download, Table2, Trash2, Upload, Users } from "lucide-react";
+import { Download, Pencil, Table2, Trash2, Upload, Users } from "lucide-react";
 import { loadClientes, saveClientes, type Cliente } from "../lib/clientes";
 import { formatPrice } from "../data/products";
 
@@ -37,7 +37,8 @@ function AdminPage() {
   const [produto, setProduto] = useState("");
   const [valor, setValor] = useState("");
   const [busca, setBusca] = useState("");
-  const [ordem, setOrdem] = useState<"" | "az" | "za" | "cresc" | "decresc">("");
+  const [ordem, setOrdem] = useState<"" | "az" | "za" | "cresc" | "decresc" | "dataRecente" | "dataAntiga">("");
+  const [editandoId, setEditandoId] = useState<string | null>(null);
 
   useEffect(() => {
     setClientes(loadClientes());
