@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Download, Table2, Trash2, Upload, Users } from "lucide-react";
+import { Download, Pencil, Table2, Trash2, Upload, Users } from "lucide-react";
 import { loadClientes, saveClientes, type Cliente } from "../lib/clientes";
 import { formatPrice } from "../data/products";
 
@@ -37,7 +37,8 @@ function AdminPage() {
   const [produto, setProduto] = useState("");
   const [valor, setValor] = useState("");
   const [busca, setBusca] = useState("");
-  const [ordem, setOrdem] = useState<"" | "az" | "za" | "cresc" | "decresc">("");
+  const [ordem, setOrdem] = useState<"" | "az" | "za" | "cresc" | "decresc" | "dataRecente" | "dataAntiga">("");
+  const [editandoId, setEditandoId] = useState<string | null>(null);
 
   useEffect(() => {
     setClientes(loadClientes());
@@ -56,6 +57,18 @@ function AdminPage() {
       avisar("Preencha todos os campos.", false);
       return;
     }
+    if (editandoId) {
+      salvarListaLocal(
+        clientes.map((c) =>
+          c.id === editandoId
+            ? { ...c, nome, email, produtoComprado: produto, valorGasto: parseFloat(valor) }
+            : c,
+        ),
+      );
+      avisar("Registro atualizado com sucesso!");
+      cancelarEdicao();
+      return;
+    }
     const novoCliente: Cliente = {
       id: Date.now().toString(),
       nome,
@@ -66,6 +79,23 @@ function AdminPage() {
     };
     salvarListaLocal([...clientes, novoCliente]);
     avisar("Cliente cadastrado com sucesso!");
+    setNome("");
+    setEmail("");
+    setProduto("");
+    setValor("");
+  };
+
+  const handleEditar = (c: Cliente) => {
+    setEditandoId(c.id);
+    setNome(c.nome);
+    setEmail(c.email);
+    setProduto(c.produtoComprado);
+    setValor(String(c.valorGasto));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const cancelarEdicao = () => {
+    setEditandoId(null);
     setNome("");
     setEmail("");
     setProduto("");
@@ -225,11 +255,17 @@ function AdminPage() {
         ).includes(termo),
       )
     : clientes;
+  const dataNum = (d: string) => {
+    const [dia, mes, ano] = d.split("/").map(Number);
+    return (ano || 0) * 10000 + (mes || 0) * 100 + (dia || 0);
+  };
   const clientesFiltrados = [...filtrados].sort((a, b) => {
     if (ordem === "az") return a.nome.localeCompare(b.nome, "pt-BR");
     if (ordem === "za") return b.nome.localeCompare(a.nome, "pt-BR");
     if (ordem === "cresc") return a.valorGasto - b.valorGasto;
     if (ordem === "decresc") return b.valorGasto - a.valorGasto;
+    if (ordem === "dataRecente") return dataNum(b.dataCompra) - dataNum(a.dataCompra);
+    if (ordem === "dataAntiga") return dataNum(a.dataCompra) - dataNum(b.dataCompra);
     return 0;
   });
 
@@ -262,7 +298,9 @@ function AdminPage() {
         onSubmit={handleSubmit}
         className="mt-8 grid gap-4 rounded-3xl border-2 border-cherry/25 bg-card p-6 shadow-cherry-sm sm:grid-cols-2"
       >
-        <h2 className="font-display text-2xl text-cherry sm:col-span-2">Cadastrar venda</h2>
+        <h2 className="font-display text-2xl text-cherry sm:col-span-2">
+          {editandoId ? "Editar venda" : "Cadastrar venda"}
+        </h2>
         <input
           type="text"
           placeholder="Nome do cliente"
@@ -297,12 +335,23 @@ function AdminPage() {
           className={inputClass}
           aria-label="Valor gasto"
         />
-        <button
-          type="submit"
-          className="rounded-full bg-cherry px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-background transition-opacity hover:opacity-90 sm:col-span-2"
-        >
-          Cadastrar cliente
-        </button>
+        <div className="flex gap-3 sm:col-span-2">
+          <button
+            type="submit"
+            className="flex-1 rounded-full bg-cherry px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-background transition-opacity hover:opacity-90"
+          >
+            {editandoId ? "Salvar alterações" : "Cadastrar cliente"}
+          </button>
+          {editandoId && (
+            <button
+              type="button"
+              onClick={cancelarEdicao}
+              className="rounded-full border-2 border-cherry px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-cherry transition-colors hover:bg-cherry hover:text-background"
+            >
+              Cancelar
+            </button>
+          )}
+        </div>
       </form>
 
       {/* Ações de arquivo: exportação com sua importação correspondente */}
@@ -383,6 +432,8 @@ function AdminPage() {
           >
             <option value="">Ordem de cadastro</option>
             <option value="az">Nome: A → Z</option>
+            <option value="dataRecente">Data: mais recente</option>
+            <option value="dataAntiga">Data: mais antiga</option>
             <option value="za">Nome: Z → A</option>
             <option value="cresc">Valor: crescente</option>
             <option value="decresc">Valor: decrescente</option>
@@ -425,7 +476,15 @@ function AdminPage() {
                   <td className="px-4 py-3 text-muted-foreground">{c.produtoComprado}</td>
                   <td className="px-4 py-3 text-foreground">{formatPrice(c.valorGasto)}</td>
                   <td className="px-4 py-3 text-muted-foreground">{c.dataCompra}</td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="whitespace-nowrap px-4 py-3 text-right">
+                    <button
+                      type="button"
+                      onClick={() => handleEditar(c)}
+                      aria-label={`Editar ${c.nome}`}
+                      className="mr-3 text-muted-foreground transition-colors hover:text-cherry"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </button>
                     <button
                       type="button"
                       onClick={() => handleRemover(c.id)}
