@@ -36,6 +36,7 @@ function AdminPage() {
   const [email, setEmail] = useState("");
   const [produto, setProduto] = useState("");
   const [valor, setValor] = useState("");
+  const [busca, setBusca] = useState("");
 
   useEffect(() => {
     setClientes(loadClientes());
@@ -213,6 +214,17 @@ function AdminPage() {
 
   const totalGeral = clientes.reduce((s, c) => s + c.valorGasto, 0);
 
+  const normalizar = (s: string) =>
+    s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const termo = normalizar(busca.trim());
+  const clientesFiltrados = termo
+    ? clientes.filter((c) =>
+        normalizar(
+          [c.nome, c.email, c.produtoComprado, formatPrice(c.valorGasto), c.dataCompra].join(" "),
+        ).includes(termo),
+      )
+    : clientes;
+
   return (
     <div className="mx-auto max-w-5xl px-5 py-14 lg:px-10">
       <p className="eyebrow text-muted-foreground">Área restrita</p>
@@ -344,8 +356,25 @@ function AdminPage() {
         </span>
       </div>
 
+      {/* Filtro */}
+      <div className="mt-6">
+        <input
+          type="search"
+          placeholder="Pesquisar por nome, e-mail, produto, valor ou data..."
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          className={inputClass}
+          aria-label="Pesquisar vendas"
+        />
+        {busca && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            {clientesFiltrados.length} de {clientes.length} registro(s) encontrados
+          </p>
+        )}
+      </div>
+
       {/* Tabela de clientes */}
-      <div className="mt-6 overflow-x-auto rounded-3xl border-2 border-cherry/25 bg-card shadow-cherry-sm">
+      <div className="mt-4 overflow-x-auto rounded-3xl border-2 border-cherry/25 bg-card shadow-cherry-sm">
         <table className="w-full min-w-[640px] border-collapse text-sm">
           <thead>
             <tr className="bg-cherry text-left text-background">
@@ -358,14 +387,16 @@ function AdminPage() {
             </tr>
           </thead>
           <tbody>
-            {clientes.length === 0 ? (
+            {clientesFiltrados.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
-                  Nenhum cliente registrado ainda.
+                  {clientes.length === 0
+                    ? "Nenhum cliente registrado ainda."
+                    : "Nenhum registro corresponde à pesquisa."}
                 </td>
               </tr>
             ) : (
-              clientes.map((c) => (
+              clientesFiltrados.map((c) => (
                 <tr key={c.id} className="border-t border-cherry/15">
                   <td className="px-4 py-3 font-medium text-foreground">{c.nome}</td>
                   <td className="px-4 py-3 text-muted-foreground">{c.email}</td>
