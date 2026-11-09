@@ -38,7 +38,7 @@ function Relatorio({ clientes }: { clientes: Cliente[] }) {
   const somaPor = (key: (c: Cliente) => string) => {
     const m = new Map<string, number>();
     clientes.forEach((c) => m.set(key(c), (m.get(key(c)) ?? 0) + c.valorGasto));
-    return [...m.entries()].sort((a, b) => b[1] - a[1])[0];
+    return [...m.entries()].sort((a, b) => b[1] - a[1])[0] ?? (["—", 0] as [string, number]);
   };
   const melhorDia = somaPor((c) => c.dataCompra || "—");
   const melhorCliente = somaPor((c) => c.nome || c.email);
