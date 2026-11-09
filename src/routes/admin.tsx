@@ -26,6 +26,64 @@ export const Route = createFileRoute("/admin")({
 const inputClass =
   "w-full rounded-xl border-2 border-cherry/25 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cherry focus:outline-none";
 
+function Relatorio({ clientes }: { clientes: Cliente[] }) {
+  const [custo, setCusto] = useState("40");
+  if (clientes.length === 0) return null;
+  const valores = clientes.map((c) => c.valorGasto);
+  const bruto = valores.reduce((s, v) => s + v, 0);
+  const pct = Math.min(100, Math.max(0, parseFloat(custo) || 0));
+  const liquido = bruto * (1 - pct / 100);
+  const menor = clientes.reduce((a, b) => (b.valorGasto < a.valorGasto ? b : a));
+  const maior = clientes.reduce((a, b) => (b.valorGasto > a.valorGasto ? b : a));
+  const somaPor = (key: (c: Cliente) => string) => {
+    const m = new Map<string, number>();
+    clientes.forEach((c) => m.set(key(c), (m.get(key(c)) ?? 0) + c.valorGasto));
+    return [...m.entries()].sort((a, b) => b[1] - a[1])[0] ?? (["—", 0] as [string, number]);
+  };
+  const melhorDia = somaPor((c) => c.dataCompra || "—");
+  const melhorCliente = somaPor((c) => c.nome || c.email);
+  const melhorProduto = somaPor((c) => c.produtoComprado || "—");
+
+  const itens: [string, string, string?][] = [
+    ["Lucro bruto", formatPrice(bruto), `${clientes.length} venda(s)`],
+    ["Lucro líquido", formatPrice(liquido), `descontando ${pct}% de custo`],
+    ["Ticket médio", formatPrice(bruto / clientes.length)],
+    ["Menor venda", formatPrice(menor.valorGasto), menor.nome],
+    ["Maior venda", formatPrice(maior.valorGasto), maior.nome],
+    ["Dia com mais vendas", melhorDia[0], formatPrice(melhorDia[1])],
+    ["Melhor cliente", melhorCliente[0], formatPrice(melhorCliente[1])],
+    ["Produto que mais faturou", melhorProduto[0], formatPrice(melhorProduto[1])],
+  ];
+
+  return (
+    <section className="mt-8 rounded-3xl border-2 border-cherry/25 bg-card p-6 shadow-cherry-sm">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h2 className="font-display text-2xl text-cherry">Relatório de vendas</h2>
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
+          Custo dos produtos (%)
+          <input
+            type="number"
+            min="0"
+            max="100"
+            value={custo}
+            onChange={(e) => setCusto(e.target.value)}
+            className={`${inputClass} w-24`}
+          />
+        </label>
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {itens.map(([titulo, valor, sub]) => (
+          <div key={titulo} className="rounded-2xl bg-cherry p-4 text-background">
+            <p className="text-[11px] uppercase tracking-[0.18em] opacity-75">{titulo}</p>
+            <p className="mt-1 truncate font-display text-2xl" title={valor}>{valor}</p>
+            {sub && <p className="mt-1 truncate text-xs opacity-75" title={sub}>{sub}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function AdminPage() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [mensagem, setMensagem] = useState<{ texto: string; ok: boolean } | null>(null);
@@ -412,6 +470,8 @@ function AdminPage() {
           {formatPrice(totalGeral)}
         </span>
       </div>
+
+      <Relatorio clientes={clientes} />
 
       {/* Filtro */}
       <div className="mt-6">
