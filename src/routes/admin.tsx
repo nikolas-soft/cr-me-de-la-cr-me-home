@@ -18,6 +18,8 @@ export const Route = createFileRoute("/admin")({
         content: "Gerencie as compras dos clientes da La Crème: cadastro, histórico e exportação.",
       },
       { name: "robots", content: "noindex" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AdminPage,
@@ -58,7 +60,7 @@ function Relatorio({ clientes }: { clientes: Cliente[] }) {
   return (
     <section className="mt-8 rounded-3xl border-2 border-cherry/25 bg-card p-6 shadow-cherry-sm">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <h2 className="font-display text-2xl text-cherry">Relatório de vendas</h2>
+        <h2 className="font-body text-2xl text-cherry">Relatório de vendas</h2>
         <label className="flex items-center gap-2 text-sm text-muted-foreground">
           Custo dos produtos (%)
           <input
@@ -75,7 +77,7 @@ function Relatorio({ clientes }: { clientes: Cliente[] }) {
         {itens.map(([titulo, valor, sub]) => (
           <div key={titulo} className="rounded-2xl bg-cherry p-4 text-background">
             <p className="text-[11px] uppercase tracking-[0.18em] opacity-75">{titulo}</p>
-            <p className="mt-1 truncate font-display text-2xl" title={valor}>{valor}</p>
+            <p className="mt-1 truncate font-body text-2xl" title={valor}>{valor}</p>
             {sub && <p className="mt-1 truncate text-xs opacity-75" title={sub}>{sub}</p>}
           </div>
         ))}
