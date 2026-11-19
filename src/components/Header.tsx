@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useCart } from "../lib/cart";
-import { Menu, X, ShoppingBag, Instagram, Facebook } from "lucide-react";
+import { Menu, X, ShoppingBag, Instagram, Facebook, Lock } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home" },
@@ -57,6 +57,14 @@ export function Header() {
             </a>
           </div>
           <Link
+            to="/admin"
+            aria-label="Admin"
+            className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <Lock className="h-[18px] w-[18px]" />
+            <span className="hidden sm:inline">Admin</span>
+          </Link>
+          <Link
             to="/carrinho"
             aria-label="Carrinho"
             className="flex items-center gap-2 text-sm text-foreground transition-opacity hover:opacity-70"
@@ -94,6 +102,14 @@ export function Header() {
               {l.label}
             </Link>
           ))}
+          <Link
+            to="/admin"
+            onClick={() => setOpen(false)}
+            className="mt-2 flex items-center gap-2 py-3 text-sm text-muted-foreground"
+          >
+            <Lock className="h-4 w-4" />
+            Admin
+          </Link>
         </nav>
       )}
     </header>
